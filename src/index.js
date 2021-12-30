@@ -69,6 +69,9 @@ class Game extends React.Component {
     const xIsNext = !this.state.xIsNext;
     this.setState({ history, xIsNext });
   }
+  jumpTo(move) {
+    console.log(`jumpTo: ${move}`);
+  }
 
   render() {
     const current = this.current();
@@ -76,6 +79,14 @@ class Game extends React.Component {
     const status = winner
       ? `Winner: ${winner}`
       : `Next player: ${this.nextMark()}`;
+    const moves = this.state.history.map((_step, move) => {
+      const desc = move ? `Go to move #${move}` : "Go to game start";
+      return (
+        <li key={move}>
+          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+        </li>
+      );
+    });
     return (
       <div className="game">
         <div className="game-board">
@@ -86,7 +97,7 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
-          <ol>{/* TODO */}</ol>
+          <ol>{moves}</ol>
         </div>
       </div>
     );

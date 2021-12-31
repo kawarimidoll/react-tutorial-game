@@ -2,13 +2,17 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 
-function Square(props) {
-  return (
-    <button className="square" onClick={props.onClick}>
-      {props.value}
-    </button>
-  );
-}
+type SquareState = "O" | "X" | null;
+type SquareProps = {
+  value: SquareState;
+  onClick: () => void;
+};
+
+const Square = (props: SquareProps) => (
+  <button className="square" onClick={props.onClick}>
+    {props.value}
+  </button>
+);
 
 function Board(props) {
   const table = [
@@ -69,7 +73,8 @@ class Game extends React.Component {
     const xIsNext = !this.state.xIsNext;
     this.setState({ history, stepNumber, xIsNext });
   }
-  jumpTo(step) {
+
+  jumpTo(step: number) {
     this.setState({
       stepNumber: step,
       xIsNext: step % 2 === 0,

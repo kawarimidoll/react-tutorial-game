@@ -8,7 +8,6 @@ type SquareProps = {
   value: SquareState;
   onClick: () => void;
 };
-
 const Square = (props: SquareProps) => (
   <button className="square" onClick={props.onClick}>
     {props.value}
@@ -27,21 +26,19 @@ const Board = (props: BoardProps) => {
     [6, 7, 8],
   ];
 
-  const renderSquare = (i: number, key: number) => (
-    <Square
-      key={key}
-      value={props.squares[i]}
-      onClick={() => props.onClick(i)}
-    />
-  );
-
   return (
     <div>
       {table.map((row, rowIdx) => {
         return (
           <div className="board-row" key={rowIdx}>
-            {row.map((square, colIdx) => {
-              return renderSquare(square, colIdx);
+            {row.map((squareIdx, colIdx) => {
+              return (
+                <Square
+                  key={colIdx}
+                  value={props.squares[squareIdx]}
+                  onClick={() => props.onClick(squareIdx)}
+                />
+              );
             })}
           </div>
         );
@@ -60,9 +57,7 @@ type GameState = {
 };
 const Game = () => {
   const [state, setState] = useState<GameState>({
-    history: [
-      { squares: [null, null, null, null, null, null, null, null, null] },
-    ],
+    history: [{ squares: Array(9).fill(null) as Repeat<null, 9> }],
     stepNumber: 0,
     xIsNext: true,
   });
@@ -84,11 +79,11 @@ const Game = () => {
   };
 
   const jumpTo = (step: number) => {
-    setState({
-      history: state.history,
+    setState((prev) => ({
+      ...prev,
       stepNumber: step,
       xIsNext: step % 2 === 0,
-    });
+    }));
   };
 
   const current = state.history[state.stepNumber];

@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { Repeat } from "typescript-tuple";
 import "./index.css";
 
 type SquareState = "O" | "X" | null;
@@ -14,22 +15,25 @@ const Square = (props: SquareProps) => (
   </button>
 );
 
-function Board(props) {
+type BoardState = Repeat<SquareState, 9>;
+type BoardProps = {
+  squares: BoardState;
+  onClick: (i: number) => void;
+};
+const Board = (props: BoardProps) => {
   const table = [
     [0, 1, 2],
     [3, 4, 5],
     [6, 7, 8],
   ];
 
-  function renderSquare(i, key) {
-    return (
-      <Square
-        key={key}
-        value={props.squares[i] || i}
-        onClick={() => props.onClick(i)}
-      />
-    );
-  }
+  const renderSquare = (i: number, key: number) => (
+    <Square
+      key={key}
+      value={props.squares[i]}
+      onClick={() => props.onClick(i)}
+    />
+  );
 
   return (
     <div>
@@ -44,7 +48,7 @@ function Board(props) {
       })}
     </div>
   );
-}
+};
 
 class Game extends React.Component {
   constructor(props) {
